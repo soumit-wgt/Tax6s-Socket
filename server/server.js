@@ -20,7 +20,7 @@ io.on('connection', (socket) => {
   console.log("A new user just connected");
 
   socket.on('join', (params, callback) => {
-    console.log(params.name);
+
     if(!isRealString(params.name) || !isRealString(params.room)){
       return callback('Name and room are required');
     }
@@ -49,7 +49,6 @@ io.on('connection', (socket) => {
   socket.on('createLocationMessage', (coords) => {
     let user = users.getUser(socket.id);
 
-    console.log(coords.lat);
     if(user){
       io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.lat, coords.lng))
     }
