@@ -17,13 +17,14 @@ let users = new Users();
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
-  console.log("A new user just connected");
+  //console.log("A new user just connected");
 
   socket.on('join', (params, callback) => {
 
     if(!isRealString(params.name) || !isRealString(params.room)){
       return callback('Name and room are required');
     }
+    console.log(`${params.name} user just connected`);
 
     socket.join(params.room);
     users.removeUser(socket.id);
@@ -35,6 +36,25 @@ io.on('connection', (socket) => {
     socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', "New User Joined!"));
 
     callback();
+  })
+
+  socket.on('joinmobile', (params) => {
+
+    // if(!isRealString(params.name) || !isRealString(params.room)){
+    //   return callback('Name and room are required');
+    // }
+    console.log(`${params.name} user just connected`);
+
+    socket.join(params.room);
+    users.removeUser(socket.id);
+    users.addUser(socket.id, params.name, params.room);
+
+    io.to(params.room).emit('updateUsersList', users.getUserList(params.room));
+    socket.emit('newMessage', generateMessage('Admin', `Welocome to ${params.room}!`));
+
+    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', "New User Joined!"));
+
+    //callback();
   })
 
   socket.on('createMessage', (message, callback) => {
@@ -56,7 +76,8 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     let user = users.removeUser(socket.id);
-
+    console.log(`${user.name} user just disconnected`);
+    
     if(user){
       io.to(user.room).emit('updateUsersList', users.getUserList(user.room));
       io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left ${user.room} chat room.`))
