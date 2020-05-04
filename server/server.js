@@ -43,6 +43,7 @@ io.on('connection', (socket) => {
     // if(!isRealString(params.name) || !isRealString(params.room)){
     //   return callback('Name and room are required');
     // }
+    console.log(`user just connected`);
     console.log(params.toString());
     console.log(`${params["name"]} user just connected ${params["room"]}`);
 
@@ -57,7 +58,7 @@ io.on('connection', (socket) => {
 
     //callback();
   })
-  
+
 
   socket.on('createMessage', (message, callback) => {
     let user = users.getUser(socket.id);
@@ -77,8 +78,8 @@ io.on('connection', (socket) => {
   })
 
   socket.on('disconnect', () => {
-    let user = users.removeUser(socket.id);
-    console.log(`${user["name"]} user just disconnected`);
+    //let user = users.removeUser(socket.id);
+    console.log(`user just disconnected`);
     
     // if(user){
     //   io.to(user.room).emit('updateUsersList', users.getUserList(user.room));
