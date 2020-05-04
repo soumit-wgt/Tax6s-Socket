@@ -43,6 +43,7 @@ io.on('connection', (socket) => {
     // if(!isRealString(params.name) || !isRealString(params.room)){
     //   return callback('Name and room are required');
     // }
+    console.log(params.toString());
     console.log(`${params["name"]} user just connected ${params["room"]}`);
 
     socket.join(params.room);
@@ -56,6 +57,7 @@ io.on('connection', (socket) => {
 
     //callback();
   })
+  
 
   socket.on('createMessage', (message, callback) => {
     let user = users.getUser(socket.id);
