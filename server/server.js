@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
     // if(!isRealString(params.name) || !isRealString(params.room)){
     //   return callback('Name and room are required');
     // }
-    console.log(`${params.name} user just connected`);
+    console.log(`${params["name"]} user just connected ${params.room}`);
 
     socket.join(params.room);
     users.removeUser(socket.id);
