@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
     // if(!isRealString(params.name) || !isRealString(params.room)){
     //   return callback('Name and room are required');
     // }
-    console.log(`${params["name"]} user just connected ${params.room}`);
+    console.log(`${params["name"]} user just connected ${params["room"]}`);
 
     socket.join(params.room);
     users.removeUser(socket.id);
@@ -76,12 +76,12 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     let user = users.removeUser(socket.id);
-    console.log(`${user.name} user just disconnected`);
+    console.log(`${user["name"]} user just disconnected`);
     
-    if(user){
-      io.to(user.room).emit('updateUsersList', users.getUserList(user.room));
-      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left ${user.room} chat room.`))
-    }
+    // if(user){
+    //   io.to(user.room).emit('updateUsersList', users.getUserList(user.room));
+    //   io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left ${user.room} chat room.`))
+    // }
   });
 });
 
